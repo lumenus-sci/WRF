@@ -83,9 +83,6 @@ DO j=jts,jte
       if (k==1) then
          chem(i,1,j,p_co2_bio)= chem(i,1,j,p_co2_bio) + conv_rho* (eghg_bio(i,1,j,p_ebio_gee) + eghg_bio(i,1,j,p_ebio_res))   ! both uptake and release
          chem(i,1,j,p_co2_oce)= chem(i,1,j,p_co2_oce) + conv_rho* ebio_co2oce(i,j)
-         chem(i,1,j,p_CO2_BIO_R)= chem(i,1,j,p_CO2_BIO_R) + conv_rho*(eghg_bio(i,1,j,p_ebio_res))   ! release only
-         chem(i,1,j,p_CO2_BIO_P)= chem(i,1,j,p_CO2_BIO_P) + conv_rho*(eghg_bio(i,1,j,p_ebio_gee) )   ! uptake only
-
       end if
 
       ENDDO
@@ -134,15 +131,12 @@ INTEGER :: i,j,m
 REAL, PARAMETER :: const= 3.6e+3 ! For unit conversion from mmol/m^2/s to mol/km2/hr
 
 REAL, DIMENSION (ims:ime, jms:jme), INTENT(IN)    ::  T2,  RAD
-REAL  ::  PARadiation  ! Hilton use PAR, consistent with rad0 
 
 REAL, DIMENSION( ims:ime, 8, jms:jme, num_vprm_in), INTENT(IN)   ::  vprm_in
 REAL, DIMENSION( ims:ime, 1,jms:jme, num_eghg_bio ), INTENT(INOUT ) ::  eghg_bio
 
 REAL, DIMENSION(num_vprm_in) :: rad0, lambda, alpha, RESP0
 REAL  ::  a1,a2,a3,Tair,Tscale,Wscale,Pscale,GEE_frac,RESP_frac,evithresh,RADscale
-REAL  ::           Tair2
-REAL  ::          Wscale1, WscaleUse 
 ! VPRM vegetation classes:
 !1-Evergreen c
 !2-Deciduous
@@ -158,108 +152,6 @@ REAL, DIMENSION(8) ::  Tmax,Tmin,Topt
 DATA Tmin   /0.,0.,0.,2.,2.,5.,2.,0./
 DATA Topt   /20.,20.,20.,20.,20.,22.,18.,0./
 DATA Tmax   /8*40./
-!--------------Sharon Gourdji's VPRM-----------------------------------------
-REAL, DIMENSION(8) ::  Tcrit,TscalS 
-REAL, DIMENSION(8) ::  TmaxS,TminS,ToptS
-REAL, DIMENSION(8) ::  par0, lambdS, beta,alphaS 
-REAL, DIMENSION(8) ::  alpha2, gammaS, K1_Ws, K2_Ws, K3_Ws 
-!DATA Tcrit /3,     11,     -5,     10,     10,     -1,     7       /
-!DATA TscalS/0.1,   0.15,   0,      0.2,    0.2,    0,      0.05    /
-!DATA TminS /0,     0,      0,      0,      0,      2,      2       /
-!DATA ToptS /20,    20,     20,     20,     20,     25,     18      /
-!DATA TmaxS /40,    40,     40,     40,     40,     40,     40      /
-!DATA par0  /403,   626,    589,    791,    791,    2803,   860     /
-!DATA lambdS/-0.14, -0.09,  -0.098, -0.11,  -0.11,  -0.077, -0.128  /
-!DATA beta  /2.583, -2.01,  0.1171, -2.371, -2.371, -0.336, -1.851  /
-!DATA alphaS/-0.39, 0.3107, 0.0272, 0.4692, 0.4692, 0.242,  0.3178  /
-!DATA alpha2/0.005, -0.011, 0.0042, -0.013, -0.013, -0.019, -0.00932/
-!DATA gammaS/1.902, 3.6197, 3.744,  3.296,  3.296,  5.2761, 4.0816  /
-!DATA K1_Ws /-3.41, -2.369, 0.2628, 1.0673, 1.0673, 0.383,  -0.5865 /
-!DATA K2_Ws /0.805, 0.3517, 0.0628, -0.168, -0.168, -0.321, 0.1269  /
-!DATA K3_Ws /-0.01, -0.003, -0.001, 0.0094, 0.0094, 0.0338, 0.00316 /
-!xhu calibrated using SW US shrub sites with unified Wscale, Grass also unified Wscale
-!!           EF_N     DF_S    DFN_MF  Shrub   Shr_Sa     Corn    Grassland
-!DATA Tcrit /3       , 11     , -5      ,11     , 10     , -1    ,  7       /
-!DATA TscalS/0.1     , 0.15   , 0       ,0      , 0.2    , 0     ,  0.05    /
-!DATA TminS /0       , 0      , 0       ,0      , 0      , 2     ,  2       /
-!DATA ToptS /20      , 20     , 20      ,20     , 20     , 25    ,  18      /
-!DATA TmaxS /40      , 40     , 40      ,40     , 40     , 40    ,  40      /
-!DATA par0  /403     , 626    , 589     ,303    , 791    , 2803  ,  871     /
-!DATA lambdS/-0.1371 , -0.09  , -0.0978 ,-0.0767, -0.1105,-0.0771, -0.1162  /
-!DATA beta  /2.583   , -2.0096, 0.1171  ,1.9294 , -2.371 ,-0.3362, -0.4656  /
-!DATA alphaS/-0.3928 , 0.3107 , 0.0272  ,0.1372 , 0.4692 , 0.242 ,  0.092   /
-!DATA alpha2/0.00546 , -0.0107, 0.00417 ,-0.0155, -0.0127, -0.019,  -0.0184 /
-!DATA gammaS/1.902   , 3.6197 , 3.744   ,6.328  , 3.296  , 5.2761,  3.9908  /
-!DATA K1_Ws /-3.405  , -2.3691, 0.2628  ,-1.1742, 1.0673 , 0.383 ,  -2.0195 /
-!DATA K2_Ws /0.8051  , 0.3517 , 0.0628  ,-0.2943, -0.1679,-0.3214, 0.3548   /
-!DATA K3_Ws /-0.00958,-0.003082,-0.001233,0.0205, 0.00938, 0.0338,  0.0123  /
-! using 3Wscale adopted on July 29, 2020
-!           EF_N     DF_S    DFN_MF    Shrub     Shr_Sa     Corn    Grassland
-!DATA Tcrit /3       , 11     , -5       , 16,         10,     -1,         -1 /
-!DATA TscalS/0.1     , 0.15   , 0        , 0,         0.2,      0,       0.05 /
-!DATA TminS /0       , 0      , 0        , 0,           0,      2,          2 /
-!DATA ToptS /20      , 20     , 20       , 20,         20,     25,         18 /
-!DATA TmaxS /40      , 40     , 40       , 40,         40,     40,         40 /
-!DATA par0  /403     , 626    , 589      , 311,       791,    2803,       873 /
-!DATA lambdS/-0.1371 , -0.09  , -0.0978  ,-0.0757, -0.1105,-0.0771,   -0.1284 /
-!DATA beta  /2.583   , -2.0096, 0.1171   , 3.1719, -2.371 ,-0.3362,   -0.7554 /
-!DATA alphaS/-0.3928 , 0.3107 , 0.0272   ,-0.3113, 0.4692 , 0.242 ,    0.0678 /
-!DATA alpha2/0.00546 , -0.0107, 0.00417  , 0.00636,-0.0127, -0.019,   0.00074 /
-!DATA gammaS/1.902   , 3.6197 , 3.744    , 5.461,  3.296  , 5.2761,     6.604 /
-!DATA K1_Ws /-3.405  , -2.3691, 0.2628   ,-5.0780, 1.0673 , 0.383 ,    0.5601 /
-!DATA K2_Ws /0.8051  , 0.3517 , 0.0628   , 0.4452, -0.1679,-0.3214,   -0.1887 /
-!DATA K3_Ws /-0.00958,-0.003082,-0.001233,-0.0082, 0.00938, 0.0338,    0.0217 /
-! back to 2 Wscale Aug 5, 2020
-!;        EF_N    DF_S    DF_N4MF Shrb-SW ShScrub Corn    Grass-all
-!DATA Tcrit /3      ,13     ,-5     ,12     ,11     ,-1     ,3        / 
-!DATA TscalS/0.1    ,0.15   ,0      ,0      ,0.2    ,0.05   ,0.2      /
-!DATA TminS /0      ,0      ,0      ,0      ,0      ,2      ,2        /
-!DATA ToptS /20     ,20     ,20     ,20     ,20     ,25     ,18       /
-!DATA TmaxS /40     ,40     ,40     ,40     ,40     ,40     ,40       /
-!DATA par0  /405    ,631    ,587    ,320    ,722    ,2782   ,903      /
-!DATA lambdS/-0.138 ,-0.0891,-0.0983,-0.0746,-0.0996,-0.0774,-0.1237  /
-!DATA beta  /3.07   ,-9.3992,-0.0346,0.9093 ,-4.124 ,-0.3039,-1.5966  /
-!DATA alphaS/-0.655 ,1.3427 ,-0.00113,-0.1132,0.68  ,0.221  ,0.1767   /
-!DATA alpha2/0.0328 ,-0.0455,0.00848,0.00218,-0.0184,-0.0179,-0.00585 /
-!DATA gammaS/2.45   ,2.8331 ,3.723  ,5.906  ,3.269  ,5.4846 ,8.91     /
-!DATA K1_Ws /-4.023 ,2.2876 ,0.4544 ,0.5883 ,2.6977 ,0.298  ,0.9148   /
-!DATA K2_Ws /1.0486 ,-0.4103,0.0934 ,-0.1101,-0.3823,-0.2933,-0.2608  /
-!DATA K3_Ws /-0.0367,0.0262 ,-0.00579,0.0045,0.0155 ,0.0323 ,0.0134   /
-!resp.wsWscale2       Wscale2 Wscale2 Wscale1 Wscale1 Wscale2 Wscale1
-!Aug 7 version
-!             EF_N    DF_S    DF_N4MF Shrb-SW ShScrub Corn    Grass-all
-!DATA Tcrit   /3       ,14      ,-5       ,12     ,11     ,-1     ,3        /
-!DATA TscalS  /0.1     ,0.1     ,0        ,0      ,0.2    ,0.05   ,0.2      /
-!DATA TminS   /0       ,0       ,0        ,0      ,0      ,2      ,2        /
-!DATA ToptS   /20      ,20      ,20       ,20     ,20     ,25     ,18       /
-!DATA TmaxS   /40      ,40      ,40       ,40     ,40     ,40     ,40       /
-!DATA par0    /403     ,630     ,588      ,320    ,722    ,2797   ,900      /
-!DATA lambdS  /-0.1381 ,-0.0884 ,-0.0979  ,-0.0744,-0.0996,-0.0771,-0.1235  /
-!DATA beta    /2.098   ,-25.1625,0.0598   ,0.9222 ,-4.124 ,-0.2869,-1.6502  /
-!DATA alphaS  /-0.2101 ,3.2568  ,0.00881  ,-0.1144,0.68   ,0.2178 ,0.1802   /
-!DATA alpha2  /-0.00374,-0.1012 ,0.00667  ,0.00220,-0.0184,-0.018 ,-0.00596 /
-!DATA gammaS  /2.078   ,3.0575  ,3.682    ,5.9435 ,3.269  ,5.3819 ,9.0504   /
-!DATA K1_Ws   /-2.935  ,14.3507 ,0.3474   ,0.5699 ,2.6977 ,0.2884 ,0.9443   /
-!DATA K2_Ws   /0.6010  ,-2.0011 ,0.0828   ,-0.1094,-0.3823,-0.2867,-0.2604  /
-!DATA K3_Ws   /0.000766,0.0749  ,-0.003837,0.00449,0.0155 ,0.0323 ,0.0132   /
-!;updated Aug 17, 2020; EF_N on Aug 31
-!            EF_N            DF            EFMN4MF         Shrb-SW   ShScrub Corn    Grass-all       
-DATA Tcrit   /1       ,      13      ,       2,             12,      11,     -1,     3       /
-DATA TscalS  /0.05    ,      0.1     ,       0.05,          0,       0.2,    0.05,   0.2     /
-DATA TminS   /0       ,      0       ,       0,             0,       0,      2,      2       /
-DATA ToptS   /20      ,      20      ,       20,            20,      20,     25,     18      /
-DATA TmaxS   /40      ,      40      ,       40,            40,      40,     40,     40      /
-DATA par0    /477.3109608 ,  594     ,       453,           320,     722,    2782,   900     /
-DATA lambdS  /-0.1217235 ,   -0.0964,        -0.1213,        -0.0744,-0.0996,-0.0775,-0.1235 /
-DATA beta    /0.560130857 ,  -14.0477,       0.0773,         0.9222, -4.124, -0.1559,-1.6502 /
-DATA alphaS  /0.119625123,   1.7657,         0.132,          -0.1144,0.68,   0.0723, 0.1802  /
-DATA alpha2  /0.002793785,   -0.0477,        0.00086,        0.00220,-0.0184,-0.001418,-0.00596/
-DATA gammaS  /1.430415734 ,  5.349,          3.199,          5.9435, 3.269,  5.5008, 9.0504  /
-DATA K1_Ws   /-0.531171587 , 9.0077,         -0.7985,        0.5699, 2.6977, 0.1451, 0.9443  /
-DATA K2_Ws   /0.181093841,   -1.2071,        0.1823,         -0.1094,-0.3823,-0.1524,-0.2604 /
-DATA K3_Ws   /-0.005228424,  0.03819,        -0.0023,        0.00449,0.0155, 0.0161, 0.0132  /
-!res.ws       Wscale1          Wscale1        Wscale1         Wscale1 Wscale1 Wscale1 Wscale1
-
 
 DO j=jts,min(jte,jde-1)
 DO i=its,min(ite,ide-1)
@@ -272,16 +164,9 @@ DO i=its,min(ite,ide-1)
 
         if (vprm_in(i,m,j,p_vegfra_vprm)<1.e-8) CYCLE  ! Then fluxes are zero
 
-!      if (m==4.or.m==5) then ! for Shrub/Savanna, waiting for approrirate calibration with data in the region
-      if (m==5) then ! for Savanna, waiting for approrirate calibration with data in the region
         a1= Tair-Tmin(m)
         a2= Tair-Tmax(m)
         a3= Tair-Topt(m)
-      else
-        a1= Tair-TminS(m)
-        a2= Tair-TmaxS(m)
-        a3= Tair-ToptS(m)
-      end if 
 
         ! Here a1 or a2 can't be negative
         if (a1<0. .OR. a2>0.) then
@@ -293,26 +178,17 @@ DO i=its,min(ite,ide-1)
         if (Tscale<0.) then
             Tscale=0.
         end if
-        if (Tscale>1.) then
-            Tscale=1.
-        end if
-! negative LSWI_MAX => 0 Wscale lead to 0 GEE and overestimation of CO2 flux,
-! thus commented out by xhu, June 23, 2020
+
        ! modification due to different dependency on ground water
-!        if (m==4 .OR. m==7) then  ! grassland and shrubland are xeric systems
-!            if (vprm_in(i,m,j,p_lswi_max)<1e-7 .or. abs(vprm_in(i,m,j,p_lswi_max)-vprm_in(i,m,j,p_lswi_min)).lt.1e-7 ) then  ! in order to avoid NaN for Wscale
-            if ( abs(vprm_in(i,m,j,p_lswi_max)-vprm_in(i,m,j,p_lswi_min)).lt.0.0000327 ) then  ! in order to avoid NaN for Wscale
-                Wscale1 = (vprm_in(i,m,j,p_lswi)-vprm_in(i,m,j,p_lswi_min))/0.0000327 
+        if (m==4 .OR. m==7) then  ! grassland and shrubland are xeric systems
+            if (vprm_in(i,m,j,p_lswi_max)<1e-7) then  ! in order to avoid NaN for Wscale
+                Wscale= 0.
             else
-                Wscale1= (vprm_in(i,m,j,p_lswi)-vprm_in(i,m,j,p_lswi_min))/(vprm_in(i,m,j,p_lswi_max)-vprm_in(i,m,j,p_lswi_min))
+                Wscale= (vprm_in(i,m,j,p_lswi)-vprm_in(i,m,j,p_lswi_min))/(vprm_in(i,m,j,p_lswi_max)-vprm_in(i,m,j,p_lswi_min))
             end if
-!        else
-           if (vprm_in(i,m,j,p_lswi_max)<-0.95) then ! xhu afraid 0 denominator 
-            Wscale= 1e-3 ! lower limitor 
-           else 
+        else
             Wscale= (1.+vprm_in(i,m,j,p_lswi))/(1.+vprm_in(i,m,j,p_lswi_max))
-           end if 
-!        end if
+        end if
 
         ! effect of leaf phenology
         if (m==1) then  ! evegreen
@@ -328,43 +204,11 @@ DO i=its,min(ite,ide-1)
             end if
         end if
 
-        if (Pscale<0.) then
-            Pscale=0.
-        end if
-        if (Pscale>1.) then
-            Pscale=1.
-        end if
-        if (Wscale1<0.) then
-            Wscale1=0.
-        end if
-        if (Wscale1>1.) then
-            Wscale1=1.
-        end if
-        if (Wscale<0.) then
-            Wscale=0.
-        end if
-        if (Wscale>1.) then
-            Wscale=1.
-        end if
-        PARadiation = RAD(i,j)/0.505
-
-        Tair2 = Tair
-        if (Tair2<Tcrit(m)) then 
-            Tair2 = (Tair2-Tcrit(m))*TscalS(m)+ Tcrit(m)
-        end if 
-!      if (m==4.or.m==5) then ! for Shrub/Savanna, waiting for approrirate calibration with data in the region
-      if (m==5) then ! for Savanna, waiting for approrirate calibration with data in the region
-        RADscale= 1./(1. + PARadiation/rad0(m))
-        GEE_frac= lambda(m)*Tscale*Pscale*Wscale*RADscale* vprm_in(i,m,j,p_evi)* PARadiation*vprm_in(i,m,j,p_vegfra_vprm) + GEE_frac
+        RADscale= 1./(1. + RAD(i,j)/rad0(m))
+        GEE_frac= lambda(m)*Tscale*Pscale*Wscale*RADscale* vprm_in(i,m,j,p_evi)* RAD(i,j)*vprm_in(i,m,j,p_vegfra_vprm) + GEE_frac
 
         RESP_frac= (alpha(m)*Tair + RESP0(m))*vprm_in(i,m,j,p_vegfra_vprm) + RESP_frac
-      else 
-        RADscale= 1./(1. + PARadiation/par0(m))
-        GEE_frac= lambdS(m)*Tscale*Pscale*Wscale*RADscale* vprm_in(i,m,j,p_evi)* PARadiation*vprm_in(i,m,j,p_vegfra_vprm) + GEE_frac
 
-        WscaleUse = Wscale1 ! xhu Aug 31, 2020
-        RESP_frac=(alphaS(m)*Tair2+beta(m)+alpha2(m)*Tair2**2+gammaS(m)*vprm_in(i,m,j,p_evi)+K1_Ws(m)*WscaleUse+K2_Ws(m)*WscaleUse*Tair2+K3_Ws(m)*WscaleUse*Tair2**2)*vprm_in(i,m,j,p_vegfra_vprm) + RESP_frac
-      end if 
 
    ENDDO veg_frac_loop
    
@@ -374,8 +218,8 @@ DO i=its,min(ite,ide-1)
   ENDDO
   ENDDO
 
-  END SUBROUTINE VPRM
-  !****************************************************************************************
+END SUBROUTINE VPRM
+!****************************************************************************************
 
 !VB: here comes the subroutine for the kaplan wetland inventory (Kaplan, 2002+2006)
 !which calculates CH4 wetland emissions from wrf soil temperature and soil moisture fields
