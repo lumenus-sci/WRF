@@ -82,7 +82,7 @@ state    real  e_hcho         i+jf     emis_ant     1         Z      i5r    "E_H
 state    real  e_ald          i+jf     emis_ant     1         Z      i5r    "E_ALD"               "EMISSIONS"          "mol km^-2 hr^-1"
 state    real  e_ket          i+jf     emis_ant     1         Z      i5r    "E_KET"               "EMISSIONS"          "mol km^-2 hr^-1"
 state    real  e_ora2         i+jf     emis_ant     1         Z      i5r    "E_ORA2"              "EMISSIONS"          "mol km^-2 hr^-1"
-state    real  e_nh3          i+jf     emis_ant     1         Z      i5r    "E_NH3"               "EMISSIONS"          "mol km^-2 hr^-1"
+state    real  e_nh3          i+jf     emis_ant     1         Z      i5rh01    "E_NH3"               "EMISSIONS"          "mol km^-2 hr^-1"
 state    real  e_pm_25        i+jf     emis_ant     1         Z      i5r    "E_PM_25"             "EMISSIONS"          "ug/m3 m/s"
 state    real  e_pm_10        i+jf     emis_ant     1         Z      i5r    "E_PM_10"             "EMISSIONS"          "ug/m3 m/s"
 state    real  e_pm25i        i+jf     emis_ant     1         Z      i5r    "E_PM25I"             "EMISSION RATE OF UNIDEN. PM2.5 MASS"  "ug/m3 m/s"
@@ -213,7 +213,7 @@ state    real  setvel_1      ij       misc         1         -       r      "set
 state    real  setvel_2      ij       misc         1         -       r      "setvel_2"     "dust gravitational settling velocity for size 2"    "m/s"
 state    real  setvel_3      ij       misc         1         -       r      "setvel_3"     "dust gravitational settling velocity for size 3"    "m/s"
 state    real  setvel_4      ij       misc         1         -       r      "setvel_4"     "dust gravitational settling velocity for size 4"    "m/s"
-state    real  setvel_5      ij       misc         1         -       r      "setvel_5"     "effective gravitational settling velocity for total"    "m/s"
+state    real  setvel_5      ij       misc         1         -       r      "setvel_5"     "dust gravitational settling velocity for size 5"    "m/s"
 state    real  dustgraset_1  ij       misc         1         -       r      "graset_1"     "Accumulated dust gravitational settling  for size 1"        "kg/m2"
 state    real  dustgraset_2  ij       misc         1         -       r      "graset_2"     "Accumulated dust gravitational settling  for size 2"        "kg/m2"
 state    real  dustgraset_3  ij       misc         1         -       r      "graset_3"     "Accumulated dust gravitational settling  for size 3"        "kg/m2"
@@ -535,19 +535,19 @@ state    real  eac_ch4          i{airc}jf    emis_aircraft    1         Z      i
 
 #
 state   real     -            ikjf     ext_coef     -         -      -       -                       "Extinction coefficients"         ""
-state   real  extcof3         ikjf     ext_coef     1         Z      h     "EXTCOF3"                 "Extinction coefficients for .3um"  "km^-1"
+state   real  extcof3         ikjf     ext_coef     1         Z      -     "EXTCOF3"                 "Extinction coefficients for .3um"  "km^-1"
 state   real  extcof55        ikjf     ext_coef     1         Z      h     "EXTCOF55"                "Extinction coefficients for .55um"  "km^-1"
-state   real  extcof106       ikjf     ext_coef     1         Z      h     "EXTCOF106"               "Extinction coefficients for 1.06um"  "km^-1"
-state   real  extcof3_5       ikjf     ext_coef     1         Z      h     "EXTCOF3_5"               "Band averaged extinction coefficients for 3-5um"  "km^-1"
-state   real  extcof8_12      ikjf     ext_coef     1         Z      h     "EXTCOF8_12"              "Band averaged extinction coefficients for 8-12um"  "km^-1"
+state   real  extcof106       ikjf     ext_coef     1         Z      -     "EXTCOF106"               "Extinction coefficients for 1.06um"  "km^-1"
+state   real  extcof3_5       ikjf     ext_coef     1         Z      -     "EXTCOF3_5"               "Band averaged extinction coefficients for 3-5um"  "km^-1"
+state   real  extcof8_12      ikjf     ext_coef     1         Z      -     "EXTCOF8_12"              "Band averaged extinction coefficients for 8-12um"  "km^-1"
 state   real     -            ikjf     bscat_coef   -         -      -       -                       "Scatter coefficients"         ""
-state   real  bscof3          ikjf     bscat_coef   1         Z      h     "BSCOF3"                  "Scatter coefficients for .3um"  "km^-1"
-state   real  bscof55         ikjf     bscat_coef   1         Z      h     "BSCOF5"                  "Scatter coefficients for .5um"  "km^-1"
-state   real  bscof106        ikjf     bscat_coef   1         Z      h     "BSCOF106"                "Scatter coefficients for 1.06um"  "km^-1"
+state   real  bscof3          ikjf     bscat_coef   1         Z      -     "BSCOF3"                  "Scatter coefficients for .3um"  "km^-1"
+state   real  bscof55         ikjf     bscat_coef   1         Z      -     "BSCOF5"                  "Scatter coefficients for .5um"  "km^-1"
+state   real  bscof106        ikjf     bscat_coef   1         Z      -     "BSCOF106"                "Scatter coefficients for 1.06um"  "km^-1"
 state   real     -            ikjf     asym_par     -         -      -       -                       "assymetry parameter"         ""
-state   real  asympar3        ikjf     asym_par     1         Z      h     "ASYMPAR3"                "assymetry parameter for .3um"  "?"
-state   real  asympar55       ikjf     asym_par     1         Z      h     "ASYMPAR55"               "assymetry parameter for .55um"  "?"
-state   real  asympar106      ikjf     asym_par     1         Z      h     "ASYMPAR106"              "assymetry parameter for 1.06um"  "?"
+state   real  asympar3        ikjf     asym_par     1         Z      -     "ASYMPAR3"                "assymetry parameter for .3um"  "?"
+state   real  asympar55       ikjf     asym_par     1         Z      -     "ASYMPAR55"               "assymetry parameter for .55um"  "?"
+state   real  asympar106      ikjf     asym_par     1         Z      -     "ASYMPAR106"              "assymetry parameter for 1.06um"  "?"
 
 #for dep outputs
 state    real  ddlen          ijo     misc        1         Z      rh       "DRY_DEP_LEN"       "dry deposition velocity"           "cm/s"
@@ -670,6 +670,17 @@ state    real  pftp_hb        ij      misc        1         -      i06r     "pft
 state    real  mtsa           ijm     misc        1         Z      i06r     "mtsa"             "Monthly surface air temp"  "K"
 state    real  mswdown        ijm     misc        1         Z      i06r     "mswdown"          "Monthly SWdown"  "W/m2"
 state    real  EFmegan        ij{nm}     misc        1         -      -        "EFmegan"          "MEGAN2 Emis Factor"       "ug m^-2 hr^-1"
+# Arrays for online ammonia emissions
+state    real   EFnh3          ij       misc      1        -     i01rh01   "EFNH3"       "NH3 Emis Factor"       "ug m^-2 hr^-1"
+state    real   actnh3         imj      misc      1        Z     i01rh01d  "ACTNH3"      "The activity of NH3" "0 - 1 fraction"
+state    real   agrisoil_nh3       ij       misc      1        Z     i01rh01d  "AGRISOIL_NH3"    "The activity of NH3" "0 - 1 fraction"
+state    real   fertilizer_nh3     imj      misc      1        Z     i01rh01d  "FERTILIZER_NH3"  "The activity of NH3" "0 - 1 fraction"
+state    real   freeinten_nh3      ij       misc      1        Z     i01rh01d  "FREEINTEN_NH3"   "The activity of NH3" "0 - 1 fraction"
+state    real   graze_nh3          ij       misc      1        Z     i01rh01d  "GRAZE_NH3"       "The activity of NH3" "0 - 1 fraction"
+state    real   industry_nh3       ij       misc      1        Z     i01rh01d  "INDUSTRY_NH3"    "The activity of NH3" "0 - 1 fraction"
+state    real   residential_nh3    ij       misc      1        Z     i01rh01d  "RESIDENTIAL_NH3" "The activity of NH3" "0 - 1 fraction"
+state    real   transport_nh3      ij       misc      1        Z     i01rh01d  "TRANSPORT_NH3"   "The activity of NH3" "0 - 1 fraction"
+
 # Input for GOCART: Background chemistry, erodible surface emissions map
 state    real  backg_oh       ikj     misc        1         -      i08r    "BACKG_OH"       "Background OH for Aerosol-GOcart option"       "volume mixing ratio"
 state    real  backg_h2o2     ikj     misc        1         -      i08r    "BACKG_H2O2"     "Background H2O2 for Aerosol-GOcart option"     "volume mixing ratio"
@@ -1415,10 +1426,10 @@ state    real  extaer1         ikj     misc        1         -      -        "EX
 state    real  extaer2         ikj     misc        1         -      -        "EXTAER2"               "bin 2 layer extinction coef" "1/km"
 state    real  extaer3         ikj     misc        1         -      -        "EXTAER3"               "bin 3 layer extinction coef" "1/km"
 state    real  extaer4         ikj     misc        1         -      -        "EXTAER4"               "bin 4 layer extinction coef" "1/km"
-state    real  tauaer1         ikj     misc        1         -      rh      "TAUAER1"               "300 nm layer optical thickness" "?"
-state    real  tauaer2         ikj     misc        1         -      rh      "TAUAER2"               "400 nm layer optical thickness" "?"
-state    real  tauaer3         ikj     misc        1         -      rh      "TAUAER3"               "600 nm layer optical thickness" "?"
-state    real  tauaer4         ikj     misc        1         -      rh      "TAUAER4"               "1000 nm layer optical thickness" "?"
+state    real  tauaer1         ikj     misc        1         -      r       "TAUAER1"               "bin 1 layer optical thickness" "?"
+state    real  tauaer2         ikj     misc        1         -      r       "TAUAER2"               "bin 2 layer optical thickness" "?"
+state    real  tauaer3         ikj     misc        1         -      r       "TAUAER3"               "bin 3 layer optical thickness" "?"
+state    real  tauaer4         ikj     misc        1         -      r       "TAUAER4"               "bin 4 layer optical thickness" "?"
 state    real  gaer1           ikj     misc        1         -      r       "GAER1"                 "bin 1 layer assymetry parameter" "?"
 state    real  gaer2           ikj     misc        1         -      r       "GAER2"                 "bin 2 layer assymetry parameter" "?"
 state    real  gaer3           ikj     misc        1         -      r       "GAER3"                 "bin 3 layer assymetry parameter" "?"
@@ -2138,10 +2149,6 @@ state   real    co2_oce    ikjftb   chem         1         -     i0{12}rhusdf=(b
 state   real    co2_bck    ikjftb   chem         1         -     i0{12}rhusdf=(bdy_interp:dt)  "CO2_BCK"       "mixing ratio of background CO2"             "ppmv"
 state   real    co2_bbu    ikjftb   chem         1         -     i0{12}rhusdf=(bdy_interp:dt)  "CO2_BBU"       "mixing ratio of biomass burning CO2"        "ppmv"
 state   real    co2_tst    ikjftb   chem         1         -     i0{12}rhusdf=(bdy_interp:dt)  "CO2_TST"      "mixing ratio of CO2, anthropogenic test fluxes"        "ppmv"
-#xhu
-state   real    CO2_BIO_R  ikjftb   chem         1         -     i0{12}rhusdf=(bdy_interp:dt)  "CO2_BIO_R"     "mixing ratio of RES CO2" "ppmv"
-state   real    CO2_BIO_P  ikjftb   chem         1         -     i0{12}rhusdf=(bdy_interp:dt)  "CO2_BIO_P"     "mixing ratio of Photosyn CO2" "ppmv"
-
 
 # Chem Scalars for CO used in the GHG options
 state   real    co_bck     ikjftb   chem         1         -     i0{12}rhusdf=(bdy_interp:dt)  "CO_BCK"        "mixing ratio of background CO"         "ppmv"
@@ -3836,6 +3843,10 @@ rconfig   integer     emiss_opt           namelist,chem          max_domains    
 rconfig   integer     emiss_opt_vol       namelist,chem          max_domains    0       rh    "emiss_opt_vol"       ""      ""
 rconfig   integer     dust_opt            namelist,chem          1              0       rh    "dust_opt"            ""      ""
 rconfig   integer     dust_schme          namelist,chem          1              2       rh    "dust_schme"       ""      ""
+
+#renchuanhua rch added
+rconfig   integer     nh3emis_opt         namelist,chem          1              0       rh    "nh3emis_opt"         ""      ""
+
 rconfig   integer     dmsemis_opt         namelist,chem          1              0       rh    "dmsemis_opt"         ""      ""
 rconfig   integer     seas_opt            namelist,chem          1              0       rh    "seas_opt"            ""      ""
 rconfig   integer     bio_emiss_opt       namelist,chem          max_domains    0       rh    "bio_emiss_opt"       ""      ""
@@ -3908,8 +3919,9 @@ rconfig   integer   mosaic_aerchem_optaa  namelist,chem          1              
 rconfig   real        af_lambda_start     namelist,chem          max_domains    200.    rh    "start wavelength for AF output" "nm"      ""
 rconfig   real        af_lambda_end       namelist,chem          max_domains    340.    rh    "end   wavelength for AF output" "nm"      ""
 # Control for ISORROPIA in MADE/SORGAM schemes
+
 rconfig   logical     do_isorropia        namelist,chem          1              .false. rh    "flag to use ISORROPIA"
-rconfig   logical     do_n2o5het          namelsit,chem          1              .false. rh    "flag to do n2o5 heterogenous chemistry via chlorine pathway"
+rconfig   logical     do_n2o5het          namelist,chem          1              .false. rh    "flag to do n2o5 heterogenous chemistry via chlorine pathway"
 
 # CHEMISTRY PACKAGE DEFINITIONS
 #
@@ -3930,8 +3942,8 @@ package   chem_trace2   chem_opt==14                 -             chem:tracer_1
 package   chem_trace_ens   chem_opt==15              -             chem:tracer_1,tracer_2,tracer_3,tracer_4,tracer_5,tracer_6,tracer_7,tracer_8,tracer_9,tracer_10,tracer_11,tracer_12,tracer_13,tracer_14,tracer_15,tracer_16,tracer_17,tracer_18,tracer_19,tracer_20,tracer_ens
 
 # GHG chem packages, passive tracers
-package   co2_tracer        chem_opt==16             -             chem:co2_ant,co2_bio,co2_oce,co2_bck,co2_tst,co_ant,co_bck,co2_bio_r,co2_bio_p
-package   ghg_tracer        chem_opt==17             -             chem:co2_ant,co2_bio,co2_oce,co2_bck,co2_tst,co2_bbu,co_ant,co_bck,co_bbu,co_tst,ch4_ant,ch4_bio,ch4_bck,ch4_bbu,ch4_tst,co2_bio_r,co2_bio_p
+package   co2_tracer        chem_opt==16             -             chem:co2_ant,co2_bio,co2_oce,co2_bck,co2_tst,co_ant,co_bck
+package   ghg_tracer        chem_opt==17             -             chem:co2_ant,co2_bio,co2_oce,co2_bck,co2_tst,co2_bbu,co_ant,co_bck,co_bbu,co_tst,ch4_ant,ch4_bio,ch4_bck,ch4_bbu,ch4_tst
 
 package   cbmzsorg chem_opt==30                      -             chem:so2,sulf,no2,no,o3,hno3,h2o2,ald,hcho,op1,op2,ora1,ora2,nh3,n2o5,no3,pan,eth,co,ol2,olt,oli,tol,xyl,hono,hno4,ket,mgly,onit,csl,iso,ho,ho2,hcl,ch3o2,ethp,ch3oh,c2h5oh,par,to2,cro,open,op3,c2o3,ro2,ano2,nap,xo2,xpar,isoprd,isopp,isopn,isopo2,so4aj,so4ai,nh4aj,nh4ai,no3aj,no3ai,naaj,naai,claj,clai,orgaro1j,orgaro1i,orgaro2j,orgaro2i,orgalk1j,orgalk1i,orgole1j,orgole1i,orgba1j,orgba1i,orgba2j,orgba2i,orgba3j,orgba3i,orgba4j,orgba4i,orgpaj,orgpai,ecj,eci,p25j,p25i,antha,seas,soila,nu0,ac0,corn
 package   cbmz_mosaic_dms_4bin chem_opt==31          -             chem:so2,sulf,no2,no,o3,hno3,h2o2,ald,hcho,op1,op2,ora1,ora2,nh3,n2o5,no3,pan,eth,co,ol2,olt,oli,tol,xyl,hono,hno4,ket,mgly,onit,csl,iso,ho,ho2,hcl,ch3o2,ethp,ch3oh,c2h5oh,par,to2,cro,open,op3,c2o3,ro2,ano2,nap,xo2,xpar,isoprd,isopp,isopn,isopo2,dms,msa,dmso,dmso2,ch3so2h,ch3sch2oo,ch3so2,ch3so3,ch3so2oo,ch3so2ch2oo,mtf,so4_a01,no3_a01,cl_a01,nh4_a01,na_a01,oin_a01,oc_a01,bc_a01,hysw_a01,water_a01,num_a01,so4_a02,no3_a02,cl_a02,nh4_a02,na_a02,oin_a02,oc_a02,bc_a02,hysw_a02,water_a02,num_a02,so4_a03,no3_a03,cl_a03,nh4_a03,na_a03,oin_a03,oc_a03,bc_a03,hysw_a03,water_a03,num_a03,so4_a04,no3_a04,cl_a04,nh4_a04,na_a04,oin_a04,oc_a04,bc_a04,hysw_a04,water_a04,num_a04,ca_a01,ca_a02,ca_a03,ca_a04,co3_a01,co3_a02,co3_a03,co3_a04,msa_a01,msa_a02,msa_a03,msa_a04
@@ -4088,6 +4100,10 @@ package   gunther1      bio_emiss_opt==1             -             -
 package   beis314       bio_emiss_opt==2             -             -
 package   megan2        bio_emiss_opt==3             -             state:mebio_isop,mebio_apin,mebio_bcar,mebio_acet,mebio_mbo,mebio_no,msebio_isop,mlai,pftp_bt,pftp_nt,pftp_sb,pftp_hb,mtsa,mswdown,EFmegan
 package   megan2_clm    bio_emiss_opt==4   
+
+# renchuanhua rch added for online nh3 emissions
+package   offline       nh3emis_opt==0              -              -
+package   online        nh3emis_opt==1              -              state:EFnh3,agrisoil_nh3,fertilizer_nh3,freeinten_nh3,graze_nh3,industry_nh3,residential_nh3,transport_nh3;emis_ant:e_nh3
 
 # Biospheric CO2 and CH4 emissions
 package   ebioco2       bio_emiss_opt==16            -             state:rad_vprm,lambda_vprm,alpha_vprm,resp_vprm;vprm_in:vegfra_vprm,evi,evi_min,evi_max,lswi,lswi_max,lswi_min;eghg_bio:ebio_gee,ebio_res,ebio_co2oce
